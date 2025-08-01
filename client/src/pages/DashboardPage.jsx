@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import API from '../services/api';
-import TransactionForm from '../components/TransactionForm';
-import Summary from '../components/Summary';
-import ExpenseChart from '../components/ExpenseChart';
-import EditTransactionModal from '../components/EditTransactionModal'; // 1. Import the modal
+import API from '../services/api.jsx';
+import TransactionForm from '../components/TransactionForm.jsx';
+import Summary from '../components/Summary.jsx';
+import ExpenseChart from '../components/ExpenseCharts.jsx';
+import EditTransactionModal from '../components/EditTransactionModal.jsx'; // 1. Import the modal
 
 const DashboardPage = () => {
   const [transactions, setTransactions] = useState([]);
