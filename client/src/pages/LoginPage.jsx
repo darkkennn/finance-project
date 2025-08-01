@@ -18,19 +18,21 @@ const LoginPage = () => {
   };
 
   const onSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await API.post('/auth/login', formData);
-
-      // 3. Use the context's login function
-      login(response.data); 
-      
-      navigate('/');
-
-    } catch (error) {
+  e.preventDefault();
+  try {
+    const response = await API.post('/auth/login', formData);
+    login(response.data);
+    navigate('/');
+  } catch (error) {
+    if (error.response) {
       console.error('Login error:', error.response.data.message);
+    } else if (error.request) {
+      console.error('Network error: Could not connect to the server.');
+    } else {
+      console.error('Error:', error.message);
     }
-  };
+  }
+};
 
   return (
     <div className="flex flex-col items-center mt-10">

@@ -1,9 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
-import Navbar from './components/navbar';
-import DashboardPage from './pages/DashboardPage';
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
-import ProtectedRoute from './components/ProtectedRoute'; // 1. Import ProtectedRoute
+import Navbar from './components/Navbar.jsx';
+import DashboardPage from './pages/DashboardPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function App() {
   return (
@@ -18,7 +18,6 @@ function App() {
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             <Route path="/" element={<DashboardPage />} />
-            {/* You can add more protected routes here later */}
           </Route>
         </Routes>
       </main>

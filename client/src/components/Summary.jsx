@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import API from '../services/api';
-import TransactionForm from '../components/TransactionForm.jsx';
-import Summary from '../components/Summary.jsx';
+import TransactionForm from '../components/TransactionForm';
 
 const DashboardPage = () => {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    // ... fetchTransactions function remains the same
     const fetchTransactions = async () => {
       try {
         const response = await API.get('/transactions');
@@ -24,9 +22,11 @@ const DashboardPage = () => {
     setTransactions([newTransaction, ...transactions]);
   };
 
+  // 1. Create a handler function to delete a transaction
   const handleDeleteTransaction = async (id) => {
     try {
       await API.delete(`/transactions/${id}`);
+      // 2. Update the state by filtering out the deleted transaction
       setTransactions(transactions.filter((transaction) => transaction._id !== id));
     } catch (error) {
       console.error('Error deleting transaction:', error);
@@ -36,14 +36,9 @@ const DashboardPage = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-
-      {/* 2. Render the Summary component and pass transactions to it */}
-      <Summary transactions={transactions} />
-
       <TransactionForm onAddTransaction={handleAddTransaction} />
       
       <div className="bg-white shadow-md rounded p-6 mt-6">
-        {/* ... rest of the transaction history list remains the same */}
         <h2 className="text-2xl font-semibold mb-4">History</h2>
         <ul>
           {transactions.map((transaction) => (
@@ -60,6 +55,7 @@ const DashboardPage = () => {
                 }`}>
                   {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount)}
                 </span>
+                {/* 3. Add the delete button */}
                 <button 
                   onClick={() => handleDeleteTransaction(transaction._id)}
                   className="bg-gray-500 hover:bg-gray-700 text-white font-bold text-xs py-1 px-2 rounded"
