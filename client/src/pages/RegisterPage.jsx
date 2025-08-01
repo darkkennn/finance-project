@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // 1. Import useAuth
 
 const RegisterPage = () => {
   const [formData, setFormData] = useState({
@@ -9,8 +10,8 @@ const RegisterPage = () => {
     password: '',
   });
   
+  const { login } = useAuth(); // 2. Get the login function from the context
   const navigate = useNavigate();
-
   const { name, email, password } = formData;
 
   const onChange = (e) => {
@@ -20,12 +21,11 @@ const RegisterPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        'http://localhost:5001/api/auth/register',
-        formData
-      );
+      const response = await API.post('/auth/register', formData);
+      
+      // 3. Use the context's login function
+      login(response.data);
 
-      console.log('Registration successful:', response.data);
       navigate('/');
 
     } catch (error) {
