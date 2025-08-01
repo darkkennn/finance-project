@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import API from '../services/api';
-import TransactionForm from '../components/TransactionForm.jsx';
-import Summary from '../components/Summary.jsx';
+import TransactionForm from '../components/TransactionForm';
+import Summary from '../components/Summary';
 
 const DashboardPage = () => {
   const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    // ... fetchTransactions function remains the same
     const fetchTransactions = async () => {
       try {
         const response = await API.get('/transactions');
@@ -34,16 +33,10 @@ const DashboardPage = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
-
-      {/* 2. Render the Summary component and pass transactions to it */}
+    <div className="container mx-auto p-4">
       <Summary transactions={transactions} />
-
       <TransactionForm onAddTransaction={handleAddTransaction} />
-      
       <div className="bg-white shadow-md rounded p-6 mt-6">
-        {/* ... rest of the transaction history list remains the same */}
         <h2 className="text-2xl font-semibold mb-4">History</h2>
         <ul>
           {transactions.map((transaction) => (
@@ -70,7 +63,7 @@ const DashboardPage = () => {
             </li>
           ))}
         </ul>
-        {transactions.length === 0 && <p>No transactions yet.</p>}
+        {transactions.length === 0 && <p className="text-gray-500 mt-4">No transactions yet.</p>}
       </div>
     </div>
   );
