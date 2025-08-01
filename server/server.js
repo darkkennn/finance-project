@@ -10,7 +10,7 @@ connectDB();
 const app = express();
 
 const corsOptions = {
-  origin: 'https://your-frontend-url.vercel.app',
+  origin: process.env.CORS_ORIGIN,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
