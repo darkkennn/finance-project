@@ -1,15 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import API from '../services/api.jsx';
 import TransactionForm from '../components/TransactionForm.jsx';
 import Summary from '../components/Summary.jsx';
 import ExpenseChart from '../components/ExpenseCharts.jsx';
-import EditTransactionModal from '../components/EditTransactionModal.jsx'; // 1. Import the modal
 
 const DashboardPage = () => {
   const [transactions, setTransactions] = useState([]);
-  const [editingTransaction, setEditingTransaction] = useState(null); // 2. State for the modal
 
-  // ... (useEffect and handleAddTransaction functions remain the same)
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
@@ -23,6 +20,7 @@ const DashboardPage = () => {
   }, []);
 
   const handleAddTransaction = (newTransaction) => {
+    // This line is crucial. It creates a new array.
     setTransactions([newTransaction, ...transactions]);
   };
   
@@ -35,7 +33,6 @@ const DashboardPage = () => {
     }
   };
   
-  // 3. Function to update the list after an edit
   const handleUpdateTransaction = (updatedTransaction) => {
     setTransactions(transactions.map(t => 
       t._id === updatedTransaction._id ? updatedTransaction : t
@@ -52,24 +49,22 @@ const DashboardPage = () => {
       <div className="bg-white shadow-md rounded p-6 mt-6">
         <h2 className="text-2xl font-semibold mb-4">History</h2>
         <ul>
+          {/* Transaction list mapping remains the same */}
           {transactions.map((transaction) => (
-            <li key={transaction._id} className="...">
-              {/* ... (description and amount spans) ... */}
+            <li 
+              key={transaction._id} 
+              className={`flex justify-between items-center p-3 mb-2 rounded ${
+                transaction.type === 'income' ? 'bg-green-100' : 'bg-red-100'
+              }`}
+            >
               <span className="font-medium">{transaction.description}</span>
               <div className="flex items-center">
-                <span className={`font-bold mr-4 ...`}>
-                   {/* ... amount text ... */}
+                <span className={`font-bold mr-4 ${
+                  transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
+                }`}>
                   {transaction.type === 'income' ? '+' : '-'}${Math.abs(transaction.amount)}
                 </span>
-                
-                {/* 4. Add the Edit button */}
-                <button 
-                  onClick={() => setEditingTransaction(transaction)}
-                  className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold text-xs py-1 px-2 rounded mr-2"
-                >
-                  Edit
-                </button>
-
+                {/* Edit button would go here if implemented */}
                 <button 
                   onClick={() => handleDeleteTransaction(transaction._id)}
                   className="bg-gray-500 hover:bg-gray-700 text-white font-bold text-xs py-1 px-2 rounded"
@@ -80,15 +75,9 @@ const DashboardPage = () => {
             </li>
           ))}
         </ul>
-        {transactions.length === 0 && <p>...</p>}
+        {transactions.length === 0 && <p className="text-gray-500 mt-4">No transactions yet.</p>}
       </div>
-      
-      {/* 5. Render the modal conditionally */}
-      <EditTransactionModal 
-        transaction={editingTransaction}
-        onClose={() => setEditingTransaction(null)}
-        onTransactionUpdated={handleUpdateTransaction}
-      />
+      {/* Edit modal would go here if implemented */}
     </div>
   );
 };
