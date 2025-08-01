@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
 const ExpenseChart = ({ transactions }) => {
-  // 1. Process data: Group expenses by category and sum amounts
-  const expenseData = transactions
-    .filter(t => t.type === 'expense')
-    .reduce((acc, transaction) => {
-      const category = transaction.category || 'Uncategorized';
-      if (!acc[category]) {
-        acc[category] = 0;
-      }
-      acc[category] += transaction.amount;
-      return acc;
-    }, {});
+  // useMemo ensures this expensive calculation only runs when 'transactions' changes
+  const chartData = useMemo(() => {
+    const expenseData = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((acc, transaction) => {
+        // Use a default category if one isn't provided
+        const category = transaction.category || 'Uncategorized';
+        if (!acc[category]) {
+          acc[category] = 0;
+        }
+        acc[category] += transaction.amount;
+        return acc;
+      }, {});
 
-  // 2. Convert the processed data into an array for the chart
-  const chartData = Object.entries(expenseData).map(([name, value]) => ({
-    name,
-    value,
-  }));
+    return Object.entries(expenseData).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }, [transactions]); // The dependency array
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#AF19FF', '#FF1943'];
 

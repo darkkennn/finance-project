@@ -20,6 +20,12 @@ const transactionSchema = new mongoose.Schema({
     required: true,
     enum: ['income', 'expense'],
   },
+  
+  category: {
+    type: String,
+    required: true,
+    trim: true,
+  },
 }, {
   timestamps: true,
 });
