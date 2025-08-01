@@ -3,8 +3,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import connectDB from './config/db.js';
 import authRoutes from './routes/authRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
 
-// Initial Setup
 dotenv.config();
 connectDB();
 const app = express();
@@ -15,7 +15,7 @@ app.use(express.json());
 
 // API Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/transactions', transactionRoutes);
 
-// Start the Server
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
