@@ -9,8 +9,12 @@ dotenv.config();
 connectDB();
 const app = express();
 
-// Middleware Setup
-app.use(cors());
+const corsOptions = {
+  origin: 'https://your-frontend-url.vercel.app',
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 // API Routes

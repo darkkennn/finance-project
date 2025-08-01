@@ -11,12 +11,13 @@ const getTransactions = async (req, res) => {
 
 const addTransaction = async (req, res) => {
   try {
-    const { description, amount, type } = req.body;
+    const { description, amount, type, category } = req.body;
 
     const newTransaction = new Transaction({
       description,
       amount,
       type,
+      category,
       user: req.user._id,
     });
 
@@ -48,4 +49,32 @@ const deleteTransaction = async (req, res) => {
   }
 };
 
-export { getTransactions, addTransaction, deleteTransaction };
+const updateTransaction = async (req, res) => {
+  try {
+    const transaction = await Transaction.findById(req.params.id);
+
+    if (!transaction) {
+      return res.status(404).json({ message: 'Transaction not found' });
+    }
+
+    // Check if the user owns the transaction
+    if (transaction.user.toString() !== req.user._id.toString()) {
+      return res.status(401).json({ message: 'User not authorized' });
+    }
+
+    const { description, amount, type, category } = req.body;
+
+    transaction.description = description || transaction.description;
+    transaction.amount = amount || transaction.amount;
+    transaction.type = type || transaction.type;
+    transaction.category = category || transaction.category;
+
+    const updatedTransaction = await transaction.save();
+    res.status(200).json(updatedTransaction);
+  } catch (error) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+
+// Add updateTransaction to your exports
+export { getTransactions, addTransaction, deleteTransaction, updateTransaction };
